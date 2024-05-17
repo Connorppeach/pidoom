@@ -1,3 +1,37 @@
+
+//
+// R_InitTables
+//
+void R_InitTables (void)
+{
+    // UNUSED: now getting from tables.c
+#if 0
+    int		i;
+    float	a;
+    float	fv;
+    int		t;
+    
+    // viewangle tangent table
+    for (i=0 ; i<FINEANGLES/2 ; i++)
+    {
+	a = (i-FINEANGLES/4+0.5)*PI*2/FINEANGLES;
+	fv = FRACUNIT*tan (a);
+	t = fv;
+	finetangent[i] = t;
+    }
+    
+    // finesine table
+    for (i=0 ; i<5*FINEANGLES/4 ; i++)
+    {
+	// OPTIMIZE: mirror...
+	a = (i+0.5)*PI*2/FINEANGLES;
+	t = FRACUNIT*sin (a);
+	finesine[i] = t;
+    }
+#endif
+
+}
+
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2005-2014 Simon Howard
@@ -498,38 +532,7 @@ fixed_t R_ScaleFromGlobalAngle (angle_t visangle)
 
 
 
-//
-// R_InitTables
-//
-void R_InitTables (void)
-{
-    // UNUSED: now getting from tables.c
-#if 0
-    int		i;
-    float	a;
-    float	fv;
-    int		t;
-    
-    // viewangle tangent table
-    for (i=0 ; i<FINEANGLES/2 ; i++)
-    {
-	a = (i-FINEANGLES/4+0.5)*PI*2/FINEANGLES;
-	fv = FRACUNIT*tan (a);
-	t = fv;
-	finetangent[i] = t;
-    }
-    
-    // finesine table
-    for (i=0 ; i<5*FINEANGLES/4 ; i++)
-    {
-	// OPTIMIZE: mirror...
-	a = (i+0.5)*PI*2/FINEANGLES;
-	t = FRACUNIT*sin (a);
-	finesine[i] = t;
-    }
-#endif
 
-}
 
 
 

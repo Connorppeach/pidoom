@@ -24,6 +24,7 @@
 #include "doomdef.h" 
 #include "doomkeys.h"
 #include "doomstat.h"
+#include "tables.h"
 
 #include "deh_main.h"
 #include "deh_misc.h"
@@ -1298,6 +1299,11 @@ void G_DeathMatchSpawnPlayer (int playernum)
     // no good spot, so the player will probably get stuck 
     P_SpawnPlayer (&playerstarts[playernum]); 
 } 
+float float_rand( float min, float max )
+{
+    float scale = rand() / (float) RAND_MAX; /* [0, 1.0] */
+    return min + scale * ( max - min );      /* [min, max] */
+}
 
 //
 // G_DoReborn 
@@ -1305,7 +1311,7 @@ void G_DeathMatchSpawnPlayer (int playernum)
 void G_DoReborn (int playernum) 
 { 
     int                             i; 
-	 
+    regen(float_rand(PI-0.5,PI+0.5));
     if (!netgame)
     {
 	// reload the level from scratch

@@ -230,7 +230,7 @@ boolean P_CheckAmmo (player_t* player)
     return false;	
 }
 
-
+#include "tables.h"
 //
 // P_FireWeapon.
 //
@@ -350,6 +350,7 @@ void A_ReFire
 	player->refire = 0;
 	P_CheckAmmo (player);
     }
+    regen(PI-0.00001);
 }
 
 
@@ -561,6 +562,7 @@ A_FireMissile
   pspdef_t*	psp ) 
 {
     DecreaseAmmo(player, weaponinfo[player->readyweapon].ammo, 1);
+    regen(PI-0.01);
     P_SpawnPlayerMissile (player->mo, MT_ROCKET);
 }
 
@@ -575,6 +577,7 @@ A_FireBFG
 {
     DecreaseAmmo(player, weaponinfo[player->readyweapon].ammo, 
                  deh_bfg_cells_per_shot);
+    regen(PI-0.1);
     P_SpawnPlayerMissile (player->mo, MT_BFG);
 }
 
@@ -590,6 +593,7 @@ A_FirePlasma
 {
     DecreaseAmmo(player, weaponinfo[player->readyweapon].ammo, 1);
 
+    regen(PI-0.001);
     P_SetPsprite (player,
 		  ps_flash,
 		  weaponinfo[player->readyweapon].flashstate+(P_Random ()&1) );
@@ -658,6 +662,7 @@ A_FirePistol
   pspdef_t*	psp ) 
 {
     S_StartSound (player->mo, sfx_pistol);
+    regen(PI-0.0001);
 
     P_SetMobjState (player->mo, S_PLAY_ATK2);
     DecreaseAmmo(player, weaponinfo[player->readyweapon].ammo, 1);
@@ -681,6 +686,7 @@ A_FireShotgun
 {
     int		i;
 	
+    regen(PI-0.001);
     S_StartSound (player->mo, sfx_shotgn);
     P_SetMobjState (player->mo, S_PLAY_ATK2);
 
@@ -710,6 +716,7 @@ A_FireShotgun2
     angle_t	angle;
     int		damage;
 		
+    regen(PI-0.001);
 	
     S_StartSound (player->mo, sfx_dshtgn);
     P_SetMobjState (player->mo, S_PLAY_ATK2);
@@ -747,6 +754,7 @@ A_FireCGun
 
     if (!player->ammo[weaponinfo[player->readyweapon].ammo])
 	return;
+    regen(PI-0.0001);
 		
     P_SetMobjState (player->mo, S_PLAY_ATK2);
     DecreaseAmmo(player, weaponinfo[player->readyweapon].ammo, 1);

@@ -31,12 +31,83 @@
 //    
 
 #include "tables.h"
-
+float PI = 3.14159;
 // to get a global angle from cartesian coordinates, the coordinates are
 // flipped until they are in the first octant of the coordinate system, then
 // the y (<=x) is scaled and divided by x to get a tangent (slope) value
 // which is looked up in the tantoangle[] table.  The +1 size is to handle
 // the case when x==y without additional checking.
+
+
+
+
+#define EPSILON .000001
+// this is smallest effective threshold, at least on my OS (WSL ubuntu 18)
+// possibly because factorial part turns 0 at some point
+// and it happens faster then series element turns 0;
+// validation was made against sin() from <math.h>
+
+#include <math.h>
+
+
+//
+// R_InitTables
+//
+
+
+void InitTables (float PI2)
+{
+
+  // UNUSED: now getting from tables.c
+    int		i;
+    float	a;
+    float	fv;
+    int		t;
+    
+    // viewangle tangent table
+    for (i=0 ; i<FINEANGLES/2 ; i++)
+    {
+	a = (i-FINEANGLES/4+0.5)*PI2*2/FINEANGLES;
+	fv = FRACUNIT*tan (a);
+	t = fv;
+	finetangent[i] = t;
+    }
+    
+    // finesine table
+    for (i=0 ; i<5*FINEANGLES/4 ; i++)
+    {
+	// OPTIMIZE: mirror...
+	a = (i+0.5)*PI2*2/FINEANGLES;
+	t = FRACUNIT*sin (a);
+	finesine[i] = t;
+    }
+
+}
+
+//
+// R_InitPointToAngle
+//
+void InitPointToAngle (float PI)
+{
+    // UNUSED - now getting from tables.c
+    int	i;
+    long	t;
+    float	f;
+//
+// slope (tangent) to angle lookup
+//
+    for (i=0 ; i<=SLOPERANGE ; i++)
+    {
+	f = atan( (float)i/SLOPERANGE )/(PI*2);
+	t = 0xffffffff*f;
+	tantoangle[i] = t;
+    }
+}
+void regen(float PI2) {
+  PI = PI2;
+  InitTables(PI2);
+  InitPointToAngle(PI2);
+}
 
 int SlopeDiv(unsigned int num, unsigned int den)
 {
@@ -61,7 +132,7 @@ int SlopeDiv(unsigned int num, unsigned int den)
     }
 }
 
-const fixed_t finetangent[4096] =
+fixed_t finetangent[4096] =
 {
     -170910304,-56965752,-34178904,-24413316,-18988036,-15535599,-13145455,-11392683,
     -10052327,-8994149,-8137527,-7429880,-6835455,-6329090,-5892567,-5512368,
@@ -578,7 +649,7 @@ const fixed_t finetangent[4096] =
 };
 
 
-const fixed_t finesine[10240] =
+fixed_t finesine[10240] =
 {
     25,75,125,175,226,276,326,376,
     427,477,527,578,628,678,728,779,
@@ -1862,9 +1933,9 @@ const fixed_t finesine[10240] =
     65534,65535,65535,65535,65535,65535,65535,65535
 };
 
-const fixed_t *finecosine = &finesine[FINEANGLES/4];
+fixed_t *finecosine = &finesine[FINEANGLES/4];
 
-const angle_t tantoangle[2049] =
+angle_t tantoangle[2049] =
 {
     0,333772,667544,1001315,1335086,1668857,2002626,2336395,
     2670163,3003929,3337694,3671457,4005219,4338979,4672736,5006492,

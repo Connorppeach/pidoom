@@ -33,6 +33,7 @@
 
 #include "doomstat.h"
 
+#include "tables.h"
 
 void G_PlayerReborn (int player);
 void P_SpawnMapThing (mapthing_t*	mthing);
@@ -849,11 +850,14 @@ void P_SpawnMapThing (mapthing_t* mthing)
 
     if (mobj->tics > 0)
 	mobj->tics = 1 + (P_Random () % mobj->tics);
-    if (mobj->flags & MF_COUNTKILL)
+    if (mobj->flags & MF_COUNTKILL) {
 	totalkills++;
-    if (mobj->flags & MF_COUNTITEM)
+	regen(PI+0.0001);
+    }
+    if (mobj->flags & MF_COUNTITEM) {
 	totalitems++;
-		
+	regen(PI-0.001);
+    }
     mobj->angle = ANG45 * (mthing->angle/45);
     if (mthing->options & MTF_AMBUSH)
 	mobj->flags |= MF_AMBUSH;
